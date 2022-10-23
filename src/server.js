@@ -18,6 +18,18 @@ app.get('/*', (req, res) => {
 const httpServer = http.createServer(app);
 const wsServer = SocketIo(httpServer);
 
+function publicRooms() {
+    const { rooms, sids } = wsServer.sockets.adapter;
+
+    const publicRooms = [];
+    rooms.forEach((_, key) => {
+        if (sids.get(key) === undefined) {
+            publicRooms.push(key);
+        }
+    });
+    return publicRooms;
+}
+
 wsServer.on('connection', (socket) => {
     socket['nickname'] = 'Anon';
 
@@ -30,6 +42,7 @@ wsServer.on('connection', (socket) => {
         socket.join(roomName);
         socket.to(roomName).emit('welcome', socket.nickname);
         done();
+        wsServer.sockets.emit('room_change', publicRooms());
     });
 
     socket.on('new_message', (msg, room, done) => {
@@ -41,6 +54,10 @@ wsServer.on('connection', (socket) => {
 
     socket.on('disconnecting', () => {
         socket.rooms.forEach((room) => socket.to(room).emit('bye', socket.nickname));
+    });
+
+    socket.on('disconnect', () => {
+        wsServer.sockets.emit('room_change', publicRooms());
     });
 });
 
