@@ -1,5 +1,5 @@
 const socket = io();
-
+//ye!
 const welcome = document.querySelector('#welcome');
 const form = welcome.querySelector('form');
 const room = document.querySelector('#room');
