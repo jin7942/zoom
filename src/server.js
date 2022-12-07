@@ -1,11 +1,13 @@
 import http from 'http';
-import SocketIo from 'socket.io';
+import { Server } from 'socket.io';
 import express from 'express';
+import { join, resolve } from 'path';
 
 const app = express();
+const __dirname = resolve();
 
 app.set('view engine', 'pug');
-app.set('views', __dirname + '/views');
+app.set('views', __dirname + '/src/views');
 app.use('/public', express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => {
@@ -16,7 +18,7 @@ app.get('/*', (req, res) => {
 });
 
 const httpServer = http.createServer(app);
-const wsServer = SocketIo(httpServer);
+const wsServer = new Server(httpServer);
 
 wsServer.on('connection', (socket) => {
     socket.on('join_room', (roomName) => {
@@ -37,4 +39,4 @@ wsServer.on('connection', (socket) => {
     });
 });
 
-httpServer.listen(3000, () => console.log('Listening on http://localhost:3000'));
+httpServer.listen(80, () => console.log('server start'));
