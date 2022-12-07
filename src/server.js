@@ -8,7 +8,7 @@ const __dirname = resolve();
 
 app.set('view engine', 'pug');
 app.set('views', __dirname + '/src/views');
-app.use('/public', express.static(__dirname + '/public'));
+app.use('/public', express.static(__dirname + '/src/public'));
 
 app.get('/', (req, res) => {
     res.render('home');
