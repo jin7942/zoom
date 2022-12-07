@@ -6,9 +6,10 @@ html(lang='en')
         meta(name='viewport', content='width=device-width, initial-scale=1.0')
         title Document
         link(rel='stylesheet', href='https://unpkg.com/mvp.css@1.12/mvp.css')
+        link(rel='stylesheet', href='/public/css/style.css')
     body
         header 
-            h1 Noom
+            h1 NEXT LEVEL
         main
             #welcome 
                 form
@@ -22,5 +23,13 @@ html(lang='en')
                     button#camera Turn Camera Off
                     select#cameras
                         option(value='device') Face Camera
+                    video#peerFace(autoplay, playsinline, width=400, height=400)
+
+                ul#chatList
+
+                #chat
+                    input#chatInput
+                    button#sendMsg Send
+
         script(src='/socket.io/socket.io.js')
         script(src='/public/js/app.js')
